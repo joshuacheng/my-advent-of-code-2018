@@ -1,10 +1,11 @@
-
+from string import ascii_lowercase
+import sys
+import re
 
 file = open('input.txt')
 polymer = file.read()
 
 # Use list as stack - only use append(item) and pop()
-stack = []
 
 def oppositeCase(char1, char2):
     if (char1.isupper() and char2 == char1.lower() or
@@ -18,28 +19,55 @@ def last(stk):
     return stk[len(stk) - 1]
 
 
-idx = 0
-while idx < len(polymer) - 1:
+'''
+    Takes in an unreacted polymer and an optional string whose instances will
+    be removed before reacting the polymer.
+    Returns the reacted polymer string
+'''
+def reactPolymer(unReacted, str=''):
+    findStrRegex = re.escape(str) + r'|' + re.escape(str.upper())
+    stack = []
+    idx = 0
 
-    if not oppositeCase(last(stack), polymer[idx]):
-        stack.append(polymer[idx])
-        idx += 1
-        continue
+    if str != '':
+        unReacted = re.sub(findStrRegex, '', unReacted)
 
-    oppositeCount = 1
-    while oppositeCase(last(stack), polymer[idx]):
-        idx += 1
-        oppositeCount += 1
-        stack.append(polymer[idx])     
+    while idx < len(unReacted) - 1:
 
-    # pop off the destroyed polymer pair/triplets
-    for i in range(oppositeCount):
-        stack.pop()
+        if not oppositeCase(last(stack), unReacted[idx]):
+            stack.append(unReacted[idx])
+            idx += 1
+            continue
 
-result = ''.join(stack)
-print(len(result))
-        
+        oppositeCount = 1
+        while oppositeCase(last(stack), unReacted[idx]):
+            idx += 1
+            oppositeCount += 1
+            stack.append(unReacted[idx])     
 
+        # pop off the destroyed polymer pair/triplets
+        for i in range(oppositeCount):
+            stack.pop()
+    
+    return ''.join(stack)
+
+
+
+# Part 1
+# result = reactPolymer(polymer)
+# print(len(result))
+# Part 1
+
+
+# Part 2 loop through all alphabet characters, delete them from polymer, and react polymers that way
+# pretty inefficient but I can't think of a better way off the top of my head
+shortestLength = sys.maxsize
+for c in ascii_lowercase:
+    currLength = len(reactPolymer(polymer, c))
+    if currLength < shortestLength:
+        shortestLength = currLength
+
+print(shortestLength)
 
 
 
