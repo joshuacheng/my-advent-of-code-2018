@@ -48,6 +48,8 @@ def closestPt(pt1, ptArr):
         return 'same'
     return minPt
 
+
+###                   PART 1                   ###
 # Any points who own closest points that are along our border should be eliminated from
 # consideration because they will own infinite closest points. They will be added
 # to this set.
@@ -57,16 +59,32 @@ borderOwners = set()
 
 # Brute force O(n^2) because I'm not sure what algorithm to use.
 # Nearest Neighbor maybe? but where do I get my kd-tree
+# for x in range(lowestX, highestX):
+#     for y in range(lowestY, highestY):
+#         closePt = closestPt((x, y), points)
+#         if closePt == 'same':
+#             continue
+#         else:
+#             if x == lowestX or x == highestX - 1 or y == lowestY or y == highestY - 1:
+#                 borderOwners.add(closePt)
+#             pointAreaDict[closePt] += 1
+
+# largestArea = list(filter(lambda x: x[0] not in borderOwners, sorted(pointAreaDict.items(), key=lambda x: x[1], reverse=True)))[0][1]
+# print(largestArea)
+
+# Part 2
+
+def sumDistances(coord, pts):
+    total = 0
+    for point in pts:
+        total += mDist(coord, point)
+
+    return total
+
+area = 0
 for x in range(lowestX, highestX):
     for y in range(lowestY, highestY):
-        closePt = closestPt((x, y), points)
-        if closePt == 'same':
-            continue
-        else:
-            if x == lowestX or x == highestX - 1 or y == lowestY or y == highestY - 1:
-                borderOwners.add(closePt)
-            pointAreaDict[closePt] += 1
+        if sumDistances((x, y), points) < 10000:
+            area += 1
 
-largestArea = list(filter(lambda x: x[0] not in borderOwners, sorted(pointAreaDict.items(), key=lambda x: x[1], reverse=True)))[0][1]
-print(largestArea)
-
+print(area)
