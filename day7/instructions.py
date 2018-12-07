@@ -10,7 +10,6 @@ graph = defaultdict(list)
 
 # Prereqs is a graph of every node and its prerequisites
 prereqs = defaultdict(list)
-allNodes = set()
 
 for cmd in cmds:
     # Luckily all the node names are in the same index in every command
