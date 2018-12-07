@@ -13,6 +13,7 @@ prereqs = defaultdict(list)
 allNodes = set()
 
 for cmd in cmds:
+    # Luckily all the node names are in the same index in every command
     pre = cmd[5]
     post = cmd[36]
     graph[pre].append(post)
@@ -21,13 +22,8 @@ for cmd in cmds:
     prereqs[pre]
     prereqs[post].append(pre)
 
-# alphabeticalGraph = dict(list(map(lambda x: (x[0], sorted(x[1])), graph.items())))
-# print(alphabeticalGraph)
-print(prereqs)
 
-# Set of visited nodes
 visited = set()
-
 allNodes = set(graph.keys())
 
 # Start nodes have zero incoming edges
